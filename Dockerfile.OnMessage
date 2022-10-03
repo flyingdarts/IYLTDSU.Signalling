@@ -1,0 +1,22 @@
+﻿FROM mcr.microsoft.com/dotnet/nightly/sdk:7.0 AS build-env
+
+WORKDIR /src
+
+COPY ./IYLTDSU.Signalling.Core ./IYLTDSU.Signalling.Core
+COPY ./IYLTDSU.Signalling.OnMessage ./IYLTDSU.Signalling.OnMessage
+
+WORKDIR /src/IYLTDSU.Signalling.OnMessage
+
+RUN dotnet restore
+
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/nightly/runtime:7.0
+
+WORKDIR /src/IYLTDSU.Signalling.OnMessage
+
+COPY --from=build-env /src/IYLTDSU.Signalling.OnMessage/out .
+
+EXPOSE 5006
+
+ENTRYPOINT [ "dotnet", "IYLTDSU.Signalling.OnMessage.dll" ]

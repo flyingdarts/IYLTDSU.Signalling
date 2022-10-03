@@ -1,0 +1,22 @@
+﻿FROM mcr.microsoft.com/dotnet/nightly/sdk:7.0 AS build-env
+
+WORKDIR /src
+
+COPY ./IYLTDSU.Signalling.Core ./IYLTDSU.Signalling.Core
+COPY ./IYLTDSU.Signalling.OnDisconnect ./IYLTDSU.Signalling.OnDisconnect
+
+WORKDIR /src/IYLTDSU.Signalling.OnDisconnect
+
+RUN dotnet restore
+
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/nightly/runtime:7.0
+
+WORKDIR /src/IYLTDSU.Signalling.OnDisconnect
+
+COPY --from=build-env /src/IYLTDSU.Signalling.OnDisconnect/out .
+
+EXPOSE 5006
+
+ENTRYPOINT [ "dotnet", "IYLTDSU.Signalling.OnDisconnect.dll" ]
