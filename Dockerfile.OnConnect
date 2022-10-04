@@ -5,11 +5,13 @@ WORKDIR /app
 COPY ./IYLTDSU.Signalling.Core ./IYLTDSU.Signalling.Core
 COPY ./IYLTDSU.Signalling.OnConnect ./IYLTDSU.Signalling.OnConnect
 
+RUN dotnet tool install -g Amazon.Lambda.Tools
+
 RUN dotnet restore IYLTDSU.Signalling.OnConnect/IYLTDSU.Signalling.OnConnect.csproj
 
-RUN dotnet publish IYLTDSU.Signalling.OnConnect/IYLTDSU.Signalling.OnConnect.csproj -c Release -o out 
+RUN dotnet publish IYLTDSU.Signalling.OnConnect/IYLTDSU.Signalling.OnConnect.csproj --runtime linux-x64 -c Release -o out 
 
-FROM mcr.microsoft.com/dotnet/nightly/runtime:7.0
+FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0
 
 WORKDIR /app
 

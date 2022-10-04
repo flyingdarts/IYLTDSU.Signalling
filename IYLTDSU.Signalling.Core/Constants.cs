@@ -11,4 +11,6 @@ public static class Constants
     {
         public const string Production = "Production";
     }
+    public const string Flyingdarts = "Flyingdarts";
+    public const string Prefix = "IYLTDSU";
 }
