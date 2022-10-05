@@ -1,21 +1,20 @@
 ﻿FROM mcr.microsoft.com/dotnet/nightly/sdk:7.0 AS build-env
 
-WORKDIR /src
+WORKDIR /app
 
-COPY ./IYLTDSU.Signalling.Core ./IYLTDSU.Signalling.Core
-COPY ./IYLTDSU.Signalling.OnDisconnect ./IYLTDSU.Signalling.OnDisconnect
+COPY ./ ./
 
-WORKDIR /src/IYLTDSU.Signalling.OnDisconnect
+RUN dotnet tool install -g Amazon.Lambda.Tools
 
-RUN dotnet restore
+RUN dotnet restore IYLTDSU.Signalling.OnDisconnect/IYLTDSU.Signalling.OnDisconnect.csproj
 
-RUN dotnet publish -c Release -o out
+RUN dotnet publish IYLTDSU.Signalling.OnDisconnect/IYLTDSU.Signalling.OnDisconnect.csproj -c Release -o out 
 
-FROM mcr.microsoft.com/dotnet/nightly/runtime:7.0
+FROM mcr.microsoft.com/dotnet/nightly/aspnet:7.0
 
-WORKDIR /src/IYLTDSU.Signalling.OnDisconnect
+WORKDIR /app
 
-COPY --from=build-env /src/IYLTDSU.Signalling.OnDisconnect/out .
+COPY --from=build-env /app/out .
 
 EXPOSE 5006
 
