@@ -10,9 +10,5 @@
 		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Alpha" Version="2.44.0-alpha.0" />
 		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Integrations.Alpha" Version="2.44.0-alpha.0" />
 		<PackageReference Include="Amazon.CDK.Lib" Version="2.44.0" />
-
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\IYLTDSU.Signalling.Core\IYLTDSU.Signalling.Core.csproj" />
 	</ItemGroup>
 </Project>
