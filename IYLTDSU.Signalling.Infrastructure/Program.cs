@@ -10,6 +10,9 @@ using Amazon.CDK.AWS.SSM;
 using IYLTDSU.Signalling.Core;
 using System.Net.WebSockets;
 using System.Security;
+using Amazon.CDK.AWS.CodeBuild;
+using Amazon.CDK.Pipelines;
+using Constructs;using IYLTDSU.Signalling.Infrastructure;
 using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 // ReSharper disable InconsistentNaming
 
@@ -22,44 +25,18 @@ var stack = new Stack(app, WickedSickService.GetIdentifierFor(nameof(Stack)), ne
     Env = new Amazon.CDK.Environment { Account = "561462764262", Region = "eu-west-1" }
 });
 
-var ecr = new Repository(stack, "Repository", new RepositoryProps
-{
-    RemovalPolicy = RemovalPolicy.DESTROY,
-    LifecycleRules = new ILifecycleRule[]
-    {
-        new LifecycleRule
-        {
-            MaxImageCount = 2,
-            TagStatus = TagStatus.ANY
-        }
-    },
-    
-});
+new FunctionConstruct(stack, "OnConnect");
+new FunctionConstruct(stack, "Disconnect");
+new FunctionConstruct(stack, "OnMessage");
 
-new CfnOutput(stack, WickedSickService.GetIdentifierFor(nameof(CfnOutput)), new CfnOutputProps
-{
-    ExportName = WickedSickService.GetIdentifierFor(nameof(CfnOutput)),
-    Description = WickedSickService.COMPANY_SLOGAN,
-    Value = ecr.RepositoryArn
-});
-
-var OnConnectFunction = new Function(stack, "OnConnectFunction", new FunctionProps
-{
-    FunctionName = "OnConnect",
-    Handler = Handler.FROM_IMAGE,
-    Code = Code.FromEcrImage(Repository.FromRepositoryArn(stack, "", "")),
-    Runtime = Runtime.FROM_IMAGE,
-    Timeout = Duration.Seconds(30),
-    MemorySize = 256
-});
 app.Synth();
 
 static class WickedSickService
 {
     public const string DOTNET_ENVIRONMENT = "Development";
     public const string COMPANY_NAME = "Flyingdarts";
-    public const string COMPANY_SLOGAN = "If you love the darts, stand up!";
-    public const string COMPANY_SHORT = "IYLTDSU";
+    public const string COMPANY_SLOGAN = "If you love the darts, stand up!"; // TODO: DescriptionAspect
+    public const string COMPANY_SHORT = "IYLTDSU"; // TODO: ResourceIdentifierAspect
 
     public static string GetIdentifierFor(string nameOfResource)
     {
@@ -67,6 +44,13 @@ static class WickedSickService
     }
 }
 
+public struct Endpoints
+{
+    public Endpoints() { }
+    public string OnConnect { get; set; } = "OnConnect";
+    public string OnDisconnect { get; set; } = "OnDisconnect";
+    public string OnMessage { get; set; } = "OnMessage";
+}
 
 // var table = new Table(stack, "Table", new TableProps
 // {

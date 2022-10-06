@@ -3,7 +3,6 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using IYLTDSU.Signalling.Core;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -22,8 +21,7 @@ public class ConnectController : ControllerBase
     }
 
     [HttpPost]
-    [Route("connect")]
-    [ProducesResponseType(201, Type = typeof(APIGatewayProxyResponse))]
+    [ProducesResponseType(200, Type = typeof(APIGatewayProxyResponse))]
     [ProducesResponseType(500, Type = typeof(APIGatewayProxyResponse))]
     async Task<APIGatewayProxyResponse> OnConnectHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
@@ -59,11 +57,4 @@ public class ConnectController : ControllerBase
             };
         }
     }
-}
-
-public class OnConnectNotification : INotification
-{
-    public long Id { get; set; }
-    public string ConnectionId { get; set; }
-    public DateTime LastChanged { get; set; }
 }

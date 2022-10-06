@@ -1,29 +1,4 @@
-﻿<!-- <Project Sdk="Microsoft.NET.Sdk"> -->
-<!-- 	<PropertyGroup> -->
-<!-- 		<OutputType>Exe</OutputType> -->
-<!-- 		<TargetFramework>net7.0</TargetFramework> -->
-<!-- 		<ImplicitUsings>enable</ImplicitUsings> -->
-<!-- 		<Nullable>disable</Nullable> -->
-<!-- 		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles> -->
-<!-- 		<AWSProjectType>Lambda</AWSProjectType> -->
-<!-- 		~1~ This property makes the build directory similar to a publish directory and helps the AWS .NET Lambda Mock Test Tool find project dependencies. @1@ -->
-<!-- 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> -->
-<!-- 		~1~ Generate ready to run images during publishing to improvement cold starts. @1@ -->
-<!-- 		<PublishReadyToRun>true</PublishReadyToRun> -->
-<!-- 	</PropertyGroup> -->
-<!-- 	<ItemGroup> -->
-<!-- 		<PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.3.1" /> -->
-<!-- 		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.0.219" /> -->
-<!-- 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.5.10" /> -->
-<!-- 		<PackageReference Include="Mapster" Version="7.3.0" /> -->
-<!-- 		<PackageReference Include="Mapster.Core" Version="1.2.0" /> -->
-<!-- 		<PackageReference Include="MediatR" Version="11.0.0" /> -->
-<!-- 	</ItemGroup> -->
-<!-- 	<ItemGroup> -->
-<!-- 		<ProjectReference Include="..\IYLTDSU.Signalling.Core\IYLTDSU.Signalling.Core.csproj" /> -->
-<!-- 	</ItemGroup> -->
-<!-- </Project> -->
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
@@ -33,6 +8,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.3.1" />
+		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.0.219" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.5.12" />
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Mapster.Core" Version="1.2.0" />

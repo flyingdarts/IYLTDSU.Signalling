@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "IYLTDSU.WebSockets.Endpoint.OnConnect": {
+    "IYLTDSU.Signalling.OnConnect": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
