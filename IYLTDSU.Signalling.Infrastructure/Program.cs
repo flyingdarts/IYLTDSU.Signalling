@@ -31,27 +31,6 @@ new FunctionConstruct(stack, "OnMessage");
 
 app.Synth();
 
-static class WickedSickService
-{
-    public const string DOTNET_ENVIRONMENT = "Development";
-    public const string COMPANY_NAME = "Flyingdarts";
-    public const string COMPANY_SLOGAN = "If you love the darts, stand up!"; // TODO: DescriptionAspect
-    public const string COMPANY_SHORT = "IYLTDSU"; // TODO: ResourceIdentifierAspect
-
-    public static string GetIdentifierFor(string nameOfResource)
-    {
-        return $"{COMPANY_NAME}-{DOTNET_ENVIRONMENT}-{nameOfResource}";
-    }
-}
-
-public struct Endpoints
-{
-    public Endpoints() { }
-    public string OnConnect { get; set; } = "OnConnect";
-    public string OnDisconnect { get; set; } = "OnDisconnect";
-    public string OnMessage { get; set; } = "OnMessage";
-}
-
 // var table = new Table(stack, "Table", new TableProps
 // {
 //     BillingMode = BillingMode.PAY_PER_REQUEST,
