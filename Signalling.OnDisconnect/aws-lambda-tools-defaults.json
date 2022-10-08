@@ -5,11 +5,11 @@
     "dotnet lambda help",
     "All the command line options for the Lambda command can be specified in this file."
   ],
-  "profile": "",
-  "region": "",
+  "profile": "default",
+  "region": "eu-west-1",
   "configuration": "Release",
-  "s3-prefix": "IYLTDSU.WebSockets.Endpoint.OnDisconnect/",
-  "template": "serverless.template",
-  "template-parameters": "",
-  "msbuild-parameters": "--self-contained true"
+  "function-runtime": "dotnet6",
+  "function-memory-size": 256,
+  "function-timeout": 30,
+  "function-handler": "Signalling.OnDisconnect"
 }
