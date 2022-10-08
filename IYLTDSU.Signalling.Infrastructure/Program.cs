@@ -1,12 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Amazon.CDK;
-using Amazon.CDK.AWS.Apigatewayv2.Alpha;
-using Amazon.CDK.AWS.Apigatewayv2.Integrations.Alpha;
-using Amazon.CDK.AWS.DynamoDB;
-using Amazon.CDK.AWS.IAM;
-using Amazon.CDK.AWS.Lambda;
 using IYLTDSU.Signalling.Infrastructure;
-using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
 
 // ReSharper disable InconsistentNaming
 var app = new App();

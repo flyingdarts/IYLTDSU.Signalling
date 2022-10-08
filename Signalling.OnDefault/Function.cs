@@ -13,6 +13,7 @@ using Amazon.Runtime;
 
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
+var WebSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
 var ConnectionIdField = "ConnectionId";
 var ApiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
 {
@@ -25,12 +26,6 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     try
     {
-        // Construct the API Gateway endpoint that incoming message will be broadcasted to.
-        var domainName = request.RequestContext.DomainName;
-        var stage = request.RequestContext.Stage;
-        var endpoint = $"https://{domainName}/{stage}";
-        context.Logger.LogInformation($"API Gateway management endpoint: {endpoint}");
-
         // The body will look something like this: {"message":"sendmessage", "data":"What are you doing?"}
         JsonDocument message = JsonDocument.Parse(request.Body);
 
@@ -58,7 +53,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
 
         // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-        var apiClient = ApiGatewayManagementApiClientFactory(endpoint);
+        var apiClient = ApiGatewayManagementApiClientFactory(WebSocketApiUrl);
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;

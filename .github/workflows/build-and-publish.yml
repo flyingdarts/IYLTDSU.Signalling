@@ -1,0 +1,12 @@
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    branches: [ main ]
+
+name: "Build and publish - OnConnect"
+
+jobs:
+# dotnet lambda deploy-function --function-name Signalling-OnConnect -frun dotnet6 --region eu-west-1
+# dotnet lambda deploy-function --function-name Signalling-OnDisconnect -frun dotnet6 --region eu-west-1
+# dotnet lambda deploy-function --function-name Signalling-OnDefault -frun dotnet6 --region eu-west-1

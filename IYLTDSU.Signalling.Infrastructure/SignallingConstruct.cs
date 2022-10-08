@@ -74,7 +74,7 @@ class SignallingConstruct : Construct
         });
         table.GrantFullAccess(OnDefault);
 
-        new WebSocketApi(scope, "SocketApi", new WebSocketApiProps
+        var webSocketApi = new WebSocketApi(scope, "SocketApi", new WebSocketApiProps
         {
             ApiName = "SignallingApi",
             ConnectRouteOptions = new WebSocketRouteOptions
@@ -90,5 +90,14 @@ class SignallingConstruct : Construct
                 Integration = new WebSocketLambdaIntegration("DisconnectIntegration", OnDisconnect)
             }
         });
+
+        var stage = new WebSocketStage(scope, "Stage", new WebSocketStageProps
+        {
+            WebSocketApi = webSocketApi,
+            StageName = "Development",
+            AutoDeploy = true
+        });
+
+        OnDefault.AddEnvironment("WebSocketApiUrl", stage.Url);
     }
 }
