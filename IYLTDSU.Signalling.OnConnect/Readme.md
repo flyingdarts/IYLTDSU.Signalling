@@ -58,6 +58,6 @@ If already installed check if new version is available.
 
 Deploy function to AWS Lambda
 ```
-    cd "Signalling.OnDisconnect/src/Signalling.OnDisconnect"
+    cd "IYLTDSU.Signalling.OnConnect/src/Signalling.OnConnect"
     dotnet lambda deploy-function
 ```

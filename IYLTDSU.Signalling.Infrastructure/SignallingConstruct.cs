@@ -26,7 +26,7 @@ class SignallingConstruct : Construct
         OnConnect = new Function(scope, "OnConnectFunction", new FunctionProps
         {
             FunctionName = "Signalling-OnConnect",
-            Handler = "Signalling.OnConnect",
+            Handler = "IYLTDSU.Signalling.OnConnect",
             Code = Code.FromAsset("lambda.zip"),
             Runtime = Runtime.DOTNET_6,
             Timeout = Duration.Seconds(30),
@@ -43,7 +43,7 @@ class SignallingConstruct : Construct
         OnDisconnect = new Function(scope, "OnDisconnectFunction", new FunctionProps
         {
             FunctionName = "Signalling-OnDisconnect",
-            Handler = "Signalling.OnDisconnect",
+            Handler = "IYLTDSU.Signalling.OnDisconnect",
             Code = Code.FromAsset("lambda.zip"),
             Runtime = Runtime.DOTNET_6,
             Timeout = Duration.Seconds(30),
@@ -60,7 +60,7 @@ class SignallingConstruct : Construct
         OnDefault = new Function(scope, "OnDefaultFunction", new FunctionProps
         {
             FunctionName = "Signalling-OnDefault",
-            Handler = "Signalling.OnDefault",
+            Handler = "IYLTDSU.Signalling.OnDefault",
             Code = Code.FromAsset("lambda.zip"),
             Runtime = Runtime.DOTNET_6,
             Timeout = Duration.Seconds(30),

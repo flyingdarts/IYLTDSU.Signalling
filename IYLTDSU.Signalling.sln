@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		cdk.json = cdk.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Signalling.OnConnect", "Signalling.OnConnect\Signalling.OnConnect.csproj", "{B6A06BD3-8749-4F7D-A482-B0049B9B1EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IYLTDSU.Signalling.OnConnect", "IYLTDSU.Signalling.OnConnect\IYLTDSU.Signalling.OnConnect.csproj", "{B6A06BD3-8749-4F7D-A482-B0049B9B1EF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Signalling.OnDisconnect", "Signalling.OnDisconnect\Signalling.OnDisconnect.csproj", "{57D9C6CD-E27E-40CD-8776-963AC8C8A552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IYLTDSU.Signalling.OnDisconnect", "IYLTDSU.Signalling.OnDisconnect\IYLTDSU.Signalling.OnDisconnect.csproj", "{57D9C6CD-E27E-40CD-8776-963AC8C8A552}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Signalling.OnDefault", "Signalling.OnDefault\Signalling.OnDefault.csproj", "{92F1190E-72C3-49E3-AA29-5CA1D28A6E3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IYLTDSU.Signalling.OnDefault", "IYLTDSU.Signalling.OnDefault\IYLTDSU.Signalling.OnDefault.csproj", "{92F1190E-72C3-49E3-AA29-5CA1D28A6E3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
