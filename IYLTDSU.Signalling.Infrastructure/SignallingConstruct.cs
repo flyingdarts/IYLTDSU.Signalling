@@ -97,6 +97,7 @@ class SignallingConstruct : Construct
             StageName = "Development",
             AutoDeploy = true
         });
+        stage.GrantManagementApiAccess(OnDefault);
 
         OnDefault.AddEnvironment("WebSocketApiUrl", stage.Url);
     }
