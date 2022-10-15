@@ -6,7 +6,7 @@ var app = new App();
 
 var stack = new Stack(app, WickedSickService.GetIdentifierFor(nameof(Stack)), new StackProps
 {
-    StackName = "IYLTDSU-WebSocket-Stack",
+    StackName = System.Environment.GetEnvironmentVariable("STACK_NAME")!,
     Env = new Amazon.CDK.Environment { 
         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT")!, 
         Region = System.Environment.GetEnvironmentVariable("AWS_REGION")! 

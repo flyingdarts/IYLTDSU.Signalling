@@ -1,0 +1,6 @@
+{
+  "app": "dotnet IYLTDSU.Signalling.Infrastructure.dll",
+  "context": {
+    "@aws-cdk/core:newStyleStackSynthesis": true
+  }
+}

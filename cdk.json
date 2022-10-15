@@ -1,6 +1,0 @@
-{
-  "app": "dotnet run --project IYLTDSU.Signalling.Infrastructure/IYLTDSU.Signalling.Infrastructure.csproj",
-  "context": {
-    "@aws-cdk/core:newStyleStackSynthesis": true
-  }
-}
