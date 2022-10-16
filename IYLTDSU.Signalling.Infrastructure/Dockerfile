@@ -17,7 +17,4 @@ COPY --from=dotnetSdk /app/out .
 
 RUN npm install -g aws-cdk
 
-COPY ./cdk.json .
-COPY ./lambda.zip .
-
 ENTRYPOINT [ "cdk", "diff" ]
