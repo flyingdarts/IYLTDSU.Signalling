@@ -31,4 +31,4 @@ jobs:
         uses: github-actions-up-and-running/pr-comment@v1.0.1
         with:
           repo-token: ${{ secrets.MY_GITHUB_TOKEN }}
-          message: "${{ env.CDK_DIFF_RESULT"
+          message: ${{ env.CDK_DIFF_RESULT }}
