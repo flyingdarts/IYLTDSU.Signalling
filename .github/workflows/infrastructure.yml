@@ -11,7 +11,7 @@ jobs:
   cdk-diff:
     runs-on: ubuntu-latest
     outputs: 
-      output1: ${{ steps.diff.outputs.result }}
+      output1: ${{ steps.diff.outputs.stdout }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.1.0
@@ -36,7 +36,7 @@ jobs:
             -e AWS_ACCOUNT=${{ secrets.AWS_ACCOUNT }} \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-          local/websocketsinfra:latest >> $GITHUB_OUTPUT
+          local/websocketsinfra:latest
 
   comment-on-pr:
     needs: cdk-diff
