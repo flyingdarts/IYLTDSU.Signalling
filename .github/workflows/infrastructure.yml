@@ -10,8 +10,6 @@ permissions:
 jobs:
   cdk-diff:
     runs-on: ubuntu-latest
-    outputs: 
-      output1: ${{ steps.diff.outputs.stdout }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3.1.0
@@ -38,14 +36,10 @@ jobs:
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
           local/websocketsinfra:latest
 
-  comment-on-pr:
-    needs: cdk-diff
-    runs-on: ubuntu-latest
-    steps:
       - name: Comment on PR
         uses: actions/github-script@0.9.0
         env:
-          DIFF: "CDK\n${{needs.cdk-diff.outputs.output1}}"
+          DIFF: "CDK\n${{ steps.diff.outputs.stdout }}"
         with:
           github-token: ${{ secrets.MY_GITHUB_TOKEN }}
           script: |
