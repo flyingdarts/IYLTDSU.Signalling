@@ -6,6 +6,8 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  issues: write
+  id-token: write
 
 jobs:
   cdk-diff:
@@ -28,20 +30,25 @@ jobs:
 
       - name: Run cdk diff in Docker
         id: diff
-        run: | 
-          docker run \
+        run: |
+          echo "stdout=$(docker run \
             -e AWS_REGION=${{ secrets.AWS_REGION }} \
             -e AWS_ACCOUNT=${{ secrets.AWS_ACCOUNT }} \
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-          local/websocketsinfra:latest
+          local/websocketsinfra:latest)" >> $GITHUB_OUTPUT
+
+      - name: Validate DIFF output
+        run: |
+          echo "OUTPUT"
+          echo ${{ steps.diff.outputs.stdout }}
 
       - name: Comment on PR
         uses: actions/github-script@0.9.0
         env:
           DIFF: "CDK\n${{ steps.diff.outputs.stdout }}"
         with:
-          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const environmentString = `Environment: Development`;
             const output = `#### ${environmentString}
