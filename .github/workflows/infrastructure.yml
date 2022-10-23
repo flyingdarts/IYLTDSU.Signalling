@@ -37,7 +37,7 @@ jobs:
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
           local/websocketsinfra:latest >> $GITHUB_STEP_SUMMARY
-          echo "result=${{ github.step_summary }}" >> $GITHUB_OUTPUTS
+          echo "result=${{ github.step_summary }}" >> $GITHUB_OUTPUT
 
   comment-on-pr:
     needs: cdk-diff
