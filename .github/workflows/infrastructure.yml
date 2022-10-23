@@ -29,6 +29,7 @@ jobs:
           push: false
 
       - name: Run cdk diff in Docker
+        uses: mathiasvr/command-output@8dbf451add3db114df0114aa5e21a1efef8c5015
         id: diff
         run: |
           echo "stdout=$(docker run \
@@ -79,3 +80,7 @@ jobs:
                 body: output
               });
             }
+
+      - name: check output
+        id: diff-output
+        run: echo ${{ steps.diff.outputs.stdout }}            
