@@ -25,9 +25,15 @@ jobs:
       - name: Run
         run: | 
           docker run -e AWS_REGION=${{ secrets.AWS_REGION }} -e AWS_ACCOUNT=${{ secrets.AWS_ACCOUNT }} -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} local/websocketsinfra:latest >> $GITHUB_STEP_SUMMARY
-          echo "CDK_DIFF_RESULT=$GITHUB_STEP_SUMMARY" >> $GITHUB_ENV
-      - name: Comment cdk diff
-        uses: github-actions-up-and-running/pr-comment@v1.0.1
+      - name: Write JSON to file.  
+        uses: devops-actions/json-to-file@v1.0.0
         with:
-          repo-token: ${{ secrets.MY_GITHUB_TOKEN }}
-          message: ${{ env.CDK_DIFF_RESULT }}
+          json: $GITHUB_STEP_SUMMARY
+          filename: cdk-diff.json
+          
+      - name: Commit file
+        uses: EndBug/add-and-commit@v9.1.1
+        with:
+          add: 'cdk-diff.json'
+          default_author: github_actions
+          message: 'CDK diff result'
