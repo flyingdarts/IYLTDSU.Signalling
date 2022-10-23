@@ -7,8 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IYLTDSU.Signalling.Infrastr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A35E3B56-A1CD-466A-9274-36901C003B96}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build-and-publish.yml = .github\workflows\build-and-publish.yml
-		cdk.json = cdk.json
+		.github\workflows\infrastructure.yml = .github\workflows\infrastructure.yml
+		.github\workflows\on-connect.yml = .github\workflows\on-connect.yml
+		.github\workflows\on-default.yml = .github\workflows\on-default.yml
+		.github\workflows\on-disconnect.yml = .github\workflows\on-disconnect.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IYLTDSU.Signalling.OnConnect", "IYLTDSU.Signalling.OnConnect\IYLTDSU.Signalling.OnConnect.csproj", "{B6A06BD3-8749-4F7D-A482-B0049B9B1EF7}"

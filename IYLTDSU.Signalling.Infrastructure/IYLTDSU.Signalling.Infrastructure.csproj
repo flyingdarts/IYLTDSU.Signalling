@@ -11,4 +11,12 @@
 		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Integrations.Alpha" Version="2.45.0-alpha.0" />
 		<PackageReference Include="Amazon.CDK.Lib" Version="2.45.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Update="cdk.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="lambda.zip">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
