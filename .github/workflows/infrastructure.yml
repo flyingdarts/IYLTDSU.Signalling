@@ -30,3 +30,9 @@ jobs:
         with:
           json: $GITHUB_STEP_SUMMARY
           filename: samue.json
+      - name: commit
+        run: |
+          # Stage the file, commit and push
+          git add samue.json
+          git commit -m "CDK diff output"
+          git push origin main
