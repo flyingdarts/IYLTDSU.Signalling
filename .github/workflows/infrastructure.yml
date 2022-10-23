@@ -1,4 +1,4 @@
-name: "Comment a Plan on a PR"
+name: "Run CDK diff"
 
 on:
   [pull_request]
