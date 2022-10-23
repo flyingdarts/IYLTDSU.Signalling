@@ -33,6 +33,8 @@ jobs:
       - name: commit
         run: |
           # Stage the file, commit and push
+          git config --global user.email "no-reply@flyingdarts.net"
+          git config --global user.name "Github Workflow"
           git add samue.json
           git commit -m "CDK diff output"
           git push origin main
