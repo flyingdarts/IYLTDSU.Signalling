@@ -72,3 +72,7 @@ jobs:
                 body: output
               });
             }
+            
+      - name: check output
+        id: diff-output
+        run: echo ${{ steps.diff.outputs.stdout }}            
