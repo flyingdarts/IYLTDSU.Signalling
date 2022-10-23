@@ -36,7 +36,7 @@ jobs:
         env:
           DIFF: "CDK\n${{ steps.diff.outputs.stdout }}"
         with:
-          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const environmentString = `Environment: Development`;
             const output = `#### ${environmentString}
