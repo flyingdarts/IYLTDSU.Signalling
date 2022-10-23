@@ -9,7 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Alpha" Version="2.45.0-alpha.0" />
 		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Integrations.Alpha" Version="2.45.0-alpha.0" />
-		<PackageReference Include="Amazon.CDK.Lib" Version="2.45.0" />
+		<PackageReference Include="Amazon.CDK.Lib" Version="2.47.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Update="cdk.json">
