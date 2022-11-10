@@ -31,7 +31,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         // Grab the data from the JSON body which is the message to broadcasted.
         JsonElement dataProperty;
-        if (!message.RootElement.TryGetProperty("data", out dataProperty) || dataProperty.GetString() == null)
+        if (!message.RootElement.TryGetProperty("content", out dataProperty) || dataProperty.GetString() == null)
         {
             context.Logger.LogInformation("Failed to find data element in JSON document");
             return new APIGatewayProxyResponse
