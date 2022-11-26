@@ -1,9 +1,9 @@
-name: "Deploy function"
+name: "Deploy Rooms OnLeave"
 on:
   push:
     branches: [ main ]
 jobs:
-  OnDefault:
+  OnLeave:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

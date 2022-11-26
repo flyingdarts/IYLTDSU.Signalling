@@ -1,4 +1,4 @@
-name: "Deploy function"
+name: "Deploy OnDefault"
 on:
   push:
     branches: [ main ]

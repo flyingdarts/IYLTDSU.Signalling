@@ -1,9 +1,9 @@
-name: "Deploy function"
+name: "Deploy Rooms OnJoin"
 on:
   push:
     branches: [ main ]
 jobs:
-  OnDefault:
+  OnJoin:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

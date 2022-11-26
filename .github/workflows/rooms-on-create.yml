@@ -1,9 +1,9 @@
-name: "Deploy function"
+name: "Deploy Rooms OnCreate"
 on:
   push:
     branches: [ main ]
 jobs:
-  OnDefault:
+  OnCreate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
