@@ -64,6 +64,9 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         await DynamoDbClient.PutItemAsync(putItemRequest);
 
+        // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
+        var apiClient = ApiGatewayManagementApiClientFactory(WebSocketApiUrl);
+
         var data = JsonSerializer.Serialize(new
         {
             action = "room/joined",
@@ -80,12 +83,30 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
 
-        // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-        var apiClient = ApiGatewayManagementApiClientFactory(WebSocketApiUrl);
+        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId);
+
+        if (connectedClientsInRoom.Any())
+        {
+            var returnToClientData = JsonSerializer.Serialize(new
+            {
+                action = "lobby/joined",
+                message = connectedClientsInRoom.Select(x => x[Fields.PlayerId]).ToArray()
+            });
+
+            var returnToClientDataStream = new MemoryStream(Encoding.UTF8.GetBytes(returnToClientData));
+
+            var returnToClientRequest = new PostToConnectionRequest
+            {
+                ConnectionId = connectionId,
+                Data = returnToClientDataStream
+            };
+
+            await apiClient.PostToConnectionAsync(returnToClientRequest);
+        }
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;
-        foreach (var item in scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId))
+        foreach (var item in connectedClientsInRoom)
         {
             var postConnectionRequest = new PostToConnectionRequest
             {
