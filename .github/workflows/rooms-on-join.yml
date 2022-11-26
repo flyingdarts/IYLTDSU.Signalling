@@ -26,4 +26,4 @@ jobs:
       - name: Deploy function
         working-directory: "IYLTDSU.Signalling.Rooms.OnJoin"
         run: |
-          dotnet lambda deploy-function --function-name Signalling-Rooms-OnJoin -frun dotnet6 --region eu-west-1t lambda deploy-function --function-name Signalling-OnDefault -frun dotnet6 --region eu-west-1
+          dotnet lambda deploy-function --function-name Signalling-Rooms-OnJoin -frun dotnet6 --region eu-west-1
