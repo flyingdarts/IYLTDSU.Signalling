@@ -10,7 +10,7 @@ using System.Text.Json;
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
 var ConnectionIdField = "ConnectionId";
-var CurrentRoomIdField = "CurrentRoomId";
+var RoomIdField = "RoomId";
 
 // The function handler that will be called for each Lambda event
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
@@ -37,7 +37,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             Item = new Dictionary<string, AttributeValue>
             {
                 { ConnectionIdField, new AttributeValue{ S = connectionId } },
-                { CurrentRoomIdField, new AttributeValue{ S = roomId } }
+                { RoomIdField, new AttributeValue{ S = roomId } }
             }
         };
 
