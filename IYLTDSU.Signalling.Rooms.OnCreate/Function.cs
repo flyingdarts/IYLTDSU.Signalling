@@ -26,7 +26,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         }
     };
 
-    await DynamoDbClient.UpdateItemAsync(putItemRequest);
+    await DynamoDbClient.PutItemAsync(putItemRequest);
 };
 
 // Build the Lambda runtime client passing in the handler to call for each
