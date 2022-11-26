@@ -29,20 +29,16 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             };
         }
 
-        var roomId = "lobby";
-        if (dataProperty.GetString()!.ToLower() != "lobby")
-        {
-            roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
-        }
+        var roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
 
         var putItemRequest = new PutItemRequest
         {
             TableName = TableName,
             Item = new Dictionary<string, AttributeValue>
-        {
-            { ConnectionIdField, new AttributeValue{ S = connectionId } },
-            { CurrentRoomIdField, new AttributeValue{ S = roomId } }
-        }
+            {
+                { ConnectionIdField, new AttributeValue{ S = connectionId } },
+                { CurrentRoomIdField, new AttributeValue{ S = roomId } }
+            }
         };
 
         await DynamoDbClient.PutItemAsync(putItemRequest);
