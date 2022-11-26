@@ -10,7 +10,7 @@ using System.Text.Json;
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
 var ConnectionIdField = "ConnectionId";
-var RoomIdField = "RoomId";
+var CurrentRoomIdField = "CurrentRoomId";
 
 // The function handler that will be called for each Lambda event
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
@@ -29,7 +29,11 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             };
         }
 
-        var roomId = Guid.Parse(dataProperty.GetString()!);
+        var roomId = "lobby";
+        if (dataProperty.GetString()!.ToLower() != "lobby")
+        {
+            roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
+        }
 
         var putItemRequest = new PutItemRequest
         {
@@ -37,11 +41,12 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             Item = new Dictionary<string, AttributeValue>
         {
             { ConnectionIdField, new AttributeValue{ S = connectionId } },
-            { RoomIdField, new AttributeValue{ S = roomId.ToString().ToLower() } }
+            { CurrentRoomIdField, new AttributeValue{ S = roomId } }
         }
         };
 
         await DynamoDbClient.PutItemAsync(putItemRequest);
+
         return new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.Created,
