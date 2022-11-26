@@ -1,4 +1,6 @@
 using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -33,6 +35,17 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         {
             roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
         }
+        var getItemRequest = new GetItemRequest
+        {
+            TableName = TableName,
+            Key = new Dictionary<string, AttributeValue>
+            {
+                { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
+            }
+        };
+        var getItemResponse = await DynamoDbClient.GetItemAsync(getItemRequest);
+
+        SignallingRecord record = (SignallingRecord)getItemResponse.Item;
 
         var putItemRequest = new PutItemRequest
         {
@@ -40,6 +53,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             Item = new Dictionary<string, AttributeValue>
             {
                 { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
+                { Fields.RoomId, new AttributeValue{ S = record.RoomId } },
                 { Fields.CurrentRoomId, new AttributeValue{ S = roomId } }
             }
         };
