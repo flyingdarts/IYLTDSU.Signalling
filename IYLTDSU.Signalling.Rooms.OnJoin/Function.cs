@@ -85,7 +85,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;
-        foreach (var item in scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId))
+        foreach (var item in scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId))
         {
             var postConnectionRequest = new PostToConnectionRequest
             {
