@@ -75,7 +75,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var scanRequest = new ScanRequest
         {
             TableName = TableName,
-            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId}"
+            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId}"
         };
 
         var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
