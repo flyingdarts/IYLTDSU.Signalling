@@ -40,9 +40,15 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         }
 
         var roomId = "lobby";
-        if (dataProperty.GetString()!.ToLower() != "lobby")
+        var playerId = "";
+
+        if (!dataProperty.GetString()!.StartsWith("lobby"))
         {
             roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
+            playerId = roomId;
+        } else
+        {
+            playerId = Guid.Parse(dataProperty.GetString()!.Split("#")[1]).ToString().ToLower();
         }
 
         var putItemRequest = new PutItemRequest
@@ -52,6 +58,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             {
                 { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
                 { Fields.RoomId, new AttributeValue{ S = roomId } },
+                { Fields.PlayerId, new AttributeValue{ S = playerId } }
             }
         };
 
@@ -60,7 +67,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "room/joined",
-            message = roomId
+            message = playerId
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
@@ -104,9 +111,9 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                     {
                         TableName = TableName,
                         Key = new Dictionary<string, AttributeValue>
-                            {
-                                {Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId}}
-                            }
+                        {
+                            {Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId}}
+                        }
                     };
 
                     context.Logger.LogInformation($"Deleting gone connection: {postConnectionRequest.ConnectionId}");
