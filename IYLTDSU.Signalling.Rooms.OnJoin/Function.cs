@@ -90,7 +90,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             var returnToClientData = JsonSerializer.Serialize(new
             {
                 action = "lobby/joined",
-                message = connectedClientsInRoom.Select(x => x[Fields.PlayerId]).ToArray()
+                message = connectedClientsInRoom.Select(x => x[Fields.PlayerId].S).ToArray()
             });
 
             var returnToClientDataStream = new MemoryStream(Encoding.UTF8.GetBytes(returnToClientData));
