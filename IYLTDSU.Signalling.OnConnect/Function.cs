@@ -4,11 +4,10 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using Amazon.Runtime.Internal;
+using IYLTDSU.Signalling.Shared;
 
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
-var ConnectionIdField = "ConnectionId";
 // The function handler that will be called for each Lambda event
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
@@ -19,7 +18,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         TableName = TableName,
         Item = new Dictionary<string, AttributeValue>
         {
-            { ConnectionIdField, new AttributeValue{ S = connectionId}}
+            { Fields.ConnectionId, new AttributeValue{ S = connectionId}}
         }
     };
 

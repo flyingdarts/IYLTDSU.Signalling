@@ -19,4 +19,7 @@
 	  <PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.22" />
 	  <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.100.22" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IYLTDSU.Signalling.Shared\IYLTDSU.Signalling.Shared.csproj" />
+  </ItemGroup>
 </Project>

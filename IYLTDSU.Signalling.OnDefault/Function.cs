@@ -10,11 +10,11 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Runtime;
+using IYLTDSU.Signalling.Shared;
 
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
 var WebSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-var ConnectionIdField = "ConnectionId";
 var ApiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
 {
     return new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig
@@ -47,7 +47,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var scanRequest = new ScanRequest
         {
             TableName = TableName,
-            ProjectionExpression = ConnectionIdField
+            ProjectionExpression = Fields.ConnectionId
         };
 
         var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
@@ -61,7 +61,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         {
             var postConnectionRequest = new PostToConnectionRequest
             {
-                ConnectionId = item[ConnectionIdField].S,
+                ConnectionId = item[Fields.ConnectionId].S,
                 Data = stream
             };
 
@@ -84,7 +84,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                         TableName = TableName,
                         Key = new Dictionary<string, AttributeValue>
                             {
-                                {ConnectionIdField, new AttributeValue {S = postConnectionRequest.ConnectionId}}
+                                {Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId}}
                             }
                     };
 
