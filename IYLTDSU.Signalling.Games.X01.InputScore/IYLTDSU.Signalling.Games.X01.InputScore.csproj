@@ -20,6 +20,6 @@
 	  <PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.33" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\IYLTDSU.Signalling.Shared\IYLTDSU.Signalling.Shared.csproj" />
+    <ProjectReference Include="..\IYLTDSU.Signalling.Shared\IYLTDSU.Signalling.Shared.csproj" />
   </ItemGroup>
 </Project>
