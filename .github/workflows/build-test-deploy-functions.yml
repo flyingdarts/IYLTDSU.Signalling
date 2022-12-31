@@ -75,6 +75,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
+          session-name: ${{ matrix.functionName }}
       - name: Deploy function
         working-directory: ${{ matrix.functionName }}
         run: |
