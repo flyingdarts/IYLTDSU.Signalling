@@ -28,6 +28,11 @@ jobs:
          - 'EnsureOnlyValidIdentifierCanConnect'
          - 'EnsureOnlyValidIdentifierCanDisconnect'
          - 'EnsureOnlyValidIdentifierCanSendMessage'
+         - 'EnsureOnlyValidIdentifierCanQueueX01'
+         - 'EnsureOnlyValidIdentifierCanScoreX01'
+         - 'EnsureOnlyValidIdentifierCanCreateRoom'
+         - 'EnsureOnlyValidIdentifierCanJoinRoom'
+         - 'EnsureOnlyValidIdentifierCanLeaveRoom'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -79,3 +84,4 @@ jobs:
         working-directory: ${{ matrix.functionName }}
         run: |
           dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun dotnet6 --region eu-west-1
+          

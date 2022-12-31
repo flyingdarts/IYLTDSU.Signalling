@@ -3,12 +3,12 @@ using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
 using Amazon.Lambda.TestUtilities;
 
-namespace IYLTDSU.Games.X01.OnQueue.Tests;
+namespace IYLTDSU.Rooms.OnCreate.Tests;
 
 public class FunctionTest
 {
     [Fact]
-    public async void EnsureOnlyValidIdentifierCanQueue()
+    public async void EnsureOnlyValidIdentifierCanCreateRoom()
     {
 
         var function = new Function();

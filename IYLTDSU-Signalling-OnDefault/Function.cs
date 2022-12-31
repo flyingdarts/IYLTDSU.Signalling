@@ -21,10 +21,10 @@ public class Function
     /// <param name="input"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    private readonly AmazonDynamoDBClient DynamoDbClient = new AmazonDynamoDBClient();
-    private readonly string TableName = Environment.GetEnvironmentVariable("TableName")!;
-    private readonly string WebSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-    private readonly Func<string, AmazonApiGatewayManagementApiClient> ApiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
+    private readonly AmazonDynamoDBClient _dynamoDbClient = new AmazonDynamoDBClient();
+    private readonly string _tableName = Environment.GetEnvironmentVariable("TableName")!;
+    private readonly string _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
+    private readonly Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
     {
         return new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig
         {
@@ -56,14 +56,14 @@ public class Function
             // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
             var scanRequest = new ScanRequest
             {
-                TableName = TableName,
+                TableName = _tableName,
                 ProjectionExpression = Fields.ConnectionId
             };
 
-            var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
+            var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
 
             // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-            var apiClient = ApiGatewayManagementApiClientFactory(WebSocketApiUrl);
+            var apiClient = _apiGatewayManagementApiClientFactory(_webSocketApiUrl);
 
             // Loop through all of the connections and broadcast the message out to the connections.
             var count = 0;
@@ -91,7 +91,7 @@ public class Function
                     {
                         var ddbDeleteRequest = new DeleteItemRequest
                         {
-                            TableName = TableName,
+                            TableName = _tableName,
                             Key = new Dictionary<string, AttributeValue>
                             {
                                 { Fields.ConnectionId, new AttributeValue { S = postConnectionRequest.ConnectionId } }
@@ -100,7 +100,7 @@ public class Function
 
                         context.Logger.LogInformation(
                             $"Deleting gone connection: {postConnectionRequest.ConnectionId}");
-                        await DynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
+                        await _dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
                     }
                     else
                     {
