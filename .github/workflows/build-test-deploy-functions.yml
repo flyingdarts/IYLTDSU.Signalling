@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         dotnetVersion: [7.0.x]
-        testFunctionName: ['TestToUpperFunction', 'TestToLowerFunction']
+        testFunctionName: ['TestToLowerFunction', 'EnsureSuccessfullResponseIfConnectionIdNotEmpty']
     steps:
       - name: Checkout
         uses: actions/checkout@v3

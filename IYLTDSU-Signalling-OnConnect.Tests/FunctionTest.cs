@@ -1,20 +1,27 @@
+using System.Net;
+using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
 
-namespace IYLTDSU_Signalling_Connect.Tests;
+namespace IYLTDSU.Signalling.OnConnect.Tests;
 
 public class FunctionTest
 {
     [Fact]
-    public void TestToUpperFunction()
+    public async void EnsureSuccessfullResponseIfConnectionIdNotEmpty()
     {
 
-        // Invoke the lambda function and confirm the string was upper cased.
         var function = new Function();
         var context = new TestLambdaContext();
-        var upperCase = function.FunctionHandler("hello world", context);
+        var response = await function.FunctionHandler(new APIGatewayProxyRequest
+        {
+            RequestContext = new APIGatewayProxyRequest.ProxyRequestContext
+            {
+                ConnectionId = "test"
+            }
+        }, context);
 
-        Assert.Equal("HELLO WORLD", upperCase);
+        Assert.True(response.StatusCode == (int)HttpStatusCode.OK);
     }
 }
