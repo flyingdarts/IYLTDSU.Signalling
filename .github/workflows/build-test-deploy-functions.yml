@@ -88,4 +88,13 @@ jobs:
         working-directory: ${{ matrix.functionName }}
         run: |
           dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun dotnet6 --region eu-west-1
+        id: function-deploy
+      - name: action-slack
+        if: failure() && steps.function-deploy.outcome != 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ steps.function-deploy.result }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
