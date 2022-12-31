@@ -11,5 +11,5 @@
   "function-runtime": "dotnet7",
   "function-memory-size": 256,
   "function-timeout": 30,
-  "function-handler": "IYLTDSU-Rooms-OnLeave::IYLTDSU.Rooms-OnLeave.Function::FunctionHandler"
+  "function-handler": "IYLTDSU-Rooms-OnLeave::IYLTDSU-Rooms-OnLeave.Function::FunctionHandler"
 }
