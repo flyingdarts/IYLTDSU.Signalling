@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
 jobs:
-  OnJoin:
+  Publish:
     runs-on: ubuntu-latest
     strategy:
         matrix:
