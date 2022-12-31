@@ -28,7 +28,11 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             };
         }
 
-        var roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
+        var data = dataProperty.GetString()!.Split("#");
+
+        var roomId = Guid.Parse(data[0]).ToString().ToLower();
+        var playerId = Guid.Parse(data[1]).ToString().ToLower();
+        var playerName = data[3];
 
         var putItemRequest = new PutItemRequest
         {
@@ -36,7 +40,9 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             Item = new Dictionary<string, AttributeValue>
             {
                 { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
-                { Fields.RoomId, new AttributeValue{ S = roomId } }
+                { Fields.RoomId, new AttributeValue{ S = roomId } },
+                { Fields.PlayerId, new AttributeValue{ S = playerId } },
+                { Fields.PlayerName, new AttributeValue{ S = playerName} }
             }
         };
 
