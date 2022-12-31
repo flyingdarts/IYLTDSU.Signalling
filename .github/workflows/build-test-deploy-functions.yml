@@ -101,7 +101,7 @@ jobs:
         if: success() && steps.function-deploy.outcome == 'success'
         uses: 8398a7/action-slack@v3
         with:
-          status: custom
+          status: ${{ job.status }}
           fields: workflow,job,commit,repo,ref,author,took
           custom_payload: |
             {
