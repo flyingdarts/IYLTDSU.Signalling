@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnetVersion: [6.0.x, 7.0.x]
+        dotnetVersion: [7.0.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,7 +23,7 @@ jobs:
     needs: Build
     strategy:
       matrix:
-        dotnetVersion: [6.0.x, 7.0.x]
+        dotnetVersion: [7.0.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -41,6 +41,7 @@ jobs:
     needs: Test
     strategy:
       matrix:
+        dotnetVersion: [7.0.x]
         functionName: ['IYLTDSU-Signalling-OnConnect', 'IYLTDSU-Signalling-OnDisconnect', 'IYLTDSU-Signalling-OnDefault', 'IYLTDSU-Signalling-Rooms-OnCreate', 'IYLTDSU-Signalling-Rooms-OnJoin', 'IYLTDSU-Signalling-Rooms-OnLeave','IYLTDSU-Signalling-Games-X01-InputScore','IYLTDSU-Games-X01-Queue']
     steps:
       - name: Checkout
@@ -48,7 +49,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '7.0.x'
+          dotnet-version: ${{ matrix.dotnetVersion}}
       - name: Build with dotnet
         run: dotnet build --configuration Release
       - name: Install Amazon.Lambda.Tools
