@@ -1,15 +1,14 @@
 using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
-using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
 
-namespace IYLTDSU.Signalling.OnConnect.Tests;
+namespace IYLTDSU.Signalling.OnDefault.Tests;
 
 public class FunctionTest
 {
     [Fact]
-    public async void EnsureOnlyValidIdentifierCanConnect()
+    public async void EnsureOnlyValidIdentifierCanSendMessage()
     {
 
         var function = new Function();

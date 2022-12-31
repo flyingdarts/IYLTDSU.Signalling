@@ -24,7 +24,10 @@ jobs:
     strategy:
       matrix:
         dotnetVersion: [7.0.x]
-        testFunctionName: ['TestToLowerFunction', 'EnsureSuccessfullResponseIfConnectionIdNotEmpty']
+        testFunctionName: 
+         - 'EnsureOnlyValidIdentifierCanConnect'
+         - 'EnsureOnlyValidIdentifierCanDisconnect'
+         - 'EnsureOnlyValidIdentifierCanSendMessage'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
