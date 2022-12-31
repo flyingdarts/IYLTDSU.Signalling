@@ -40,6 +40,15 @@ jobs:
         run: dotnet build --configuration Release
       - name: Run tests
         run: dotnet test --filter Name=${{ matrix.testFunctionName }}
+        id: function-test
+      - name: action-slack
+        if: failure() && steps.function-test.outcome != 'success' }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ step2.result }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   Publish:
     runs-on: ubuntu-latest

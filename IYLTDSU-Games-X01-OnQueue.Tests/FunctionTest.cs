@@ -21,6 +21,6 @@ public class FunctionTest
             }
         }, context);
 
-        Assert.True(response.StatusCode == (int)HttpStatusCode.OK);
+        Assert.True(response.StatusCode == (int)HttpStatusCode.Conflict);
     }
 }
