@@ -42,7 +42,7 @@ jobs:
         run: dotnet test --filter Name=${{ matrix.testFunctionName }}
         id: function-test
       - name: action-slack
-        if: failure() && steps.function-test.outcome != 'success' }}
+        if: failure() && steps.function-test.outcome != 'success'
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ steps.function-test.result }}
