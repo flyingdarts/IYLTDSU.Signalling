@@ -8,13 +8,13 @@ jobs:
     strategy:
         matrix:
           functionName: [
-            'IYLTDSU.Signalling.OnConnect', 
-            'IYLTDSU.Signalling.OnDisconnect', 
-            'IYLTDSU.Signalling.OnDefault', 
-            'IYLTDSU.Signalling.Rooms.OnCreate', 
-            'IYLTDSU.Signalling.Rooms.OnJoin', 
-            'IYLTDSU.Signalling.Rooms.OnLeave',
-            'IYLTDSU.Signalling.Games.X01.InputScore'
+            'IYLTDSU-Signalling-OnConnect', 
+            'IYLTDSU-Signalling-OnDisconnect', 
+            'IYLTDSU-Signalling-OnDefault', 
+            'IYLTDSU-Signalling-Rooms-OnCreate', 
+            'IYLTDSU-Signalling-Rooms-OnJoin', 
+            'IYLTDSU-Signalling-Rooms-OnLeave',
+            'IYLTDSU-Signalling-Games-X01-InputScore'
            ]
     steps:
       - name: Checkout
