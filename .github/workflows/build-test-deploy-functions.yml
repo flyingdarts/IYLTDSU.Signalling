@@ -74,7 +74,6 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
-          role-session-name: ${{ matrix.functionName }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy function
         working-directory: ${{ matrix.functionName }}
