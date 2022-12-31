@@ -1,7 +1,6 @@
 using System.Net;
 using Amazon.Lambda.APIGatewayEvents;
 using Xunit;
-using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
 
 namespace IYLTDSU.Signalling.OnConnect.Tests;
