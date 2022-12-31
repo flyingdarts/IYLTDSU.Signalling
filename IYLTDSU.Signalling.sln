@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A35E3B56-A1CD-466A-9274-36901C003B96}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\deploy-functions.yml = .github\workflows\deploy-functions.yml
+		.github\workflows\deploy-lambda-functions.yml = .github\workflows\deploy-lambda-functions.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IYLTDSU.Signalling.Shared", "IYLTDSU.Signalling.Shared\IYLTDSU.Signalling.Shared.csproj", "{3875DCD0-29B6-470B-9710-171B956942AB}"

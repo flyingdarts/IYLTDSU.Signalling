@@ -1,4 +1,4 @@
-name: "Deploy functions"
+name: "Deploy lambda functions"
 on:
   push:
     branches: [ main ]
