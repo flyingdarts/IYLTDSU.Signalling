@@ -14,4 +14,12 @@ public class FunctionTest
 
         Assert.Equal("HELLO WORLD", upperCase);
     }
+    [Fact]
+    public void TestToLowerFunction()
+    {
+
+        var upperCase = "hello world".ToUpper();
+
+        Assert.Equal("HELLO WORLD", upperCase);
+    }
 }

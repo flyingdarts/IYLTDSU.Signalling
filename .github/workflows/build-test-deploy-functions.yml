@@ -24,6 +24,7 @@ jobs:
     strategy:
       matrix:
         dotnetVersion: [7.0.x]
+        testFunctionName: ['TestToUpperFunction', 'TestToLowerFunction']
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,7 +35,7 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
       - name: Run tests
-        run: dotnet test
+        run: dotnet test --filter Name=${{ matrix.testFunctionName }}
 
   Publish:
     runs-on: ubuntu-latest
@@ -42,7 +43,7 @@ jobs:
     strategy:
       matrix:
         dotnetVersion: [7.0.x]
-        functionName: ['IYLTDSU-Signalling-OnConnect', 'IYLTDSU-Signalling-OnDisconnect', 'IYLTDSU-Signalling-OnDefault', 'IYLTDSU-Signalling-Rooms-OnCreate', 'IYLTDSU-Signalling-Rooms-OnJoin', 'IYLTDSU-Signalling-Rooms-OnLeave','IYLTDSU-Signalling-Games-X01-InputScore','IYLTDSU-Games-X01-Queue']
+        functionName: ['IYLTDSU-Signalling-OnConnect', 'IYLTDSU-Signalling-OnDisconnect', 'IYLTDSU-Signalling-OnDefault', 'IYLTDSU-Signalling-Rooms-OnCreate', 'IYLTDSU-Signalling-Rooms-OnJoin', 'IYLTDSU-Signalling-Rooms-OnLeave','IYLTDSU-Signalling-Games-X01-InputScore','IYLTDSU-Games-X01-OnQueue']
     steps:
       - name: Checkout
         uses: actions/checkout@v3
