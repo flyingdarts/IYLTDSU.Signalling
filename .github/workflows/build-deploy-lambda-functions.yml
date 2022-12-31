@@ -1,8 +1,22 @@
-name: "Deploy lambda functions"
+name: "Build and deploy lambda functions"
 on:
   push:
     branches: [ main ]
 jobs:
+  Build: 
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnetVersion: [6.0.x, 7.0.x]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: {{ matrix.dotnetVersion}}
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
   Publish:
     runs-on: ubuntu-latest
     strategy:
@@ -17,14 +31,10 @@ jobs:
             'IYLTDSU-Signalling-Games-X01-InputScore'
            ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
       - name: Install Amazon.Lambda.Tools
         run: |
           dotnet tool install -g Amazon.Lambda.Tools
