@@ -97,4 +97,12 @@ jobs:
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: action-slack
+        if: success() && steps.function-deploy.outcome == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ steps.function-deploy.outcome }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           
