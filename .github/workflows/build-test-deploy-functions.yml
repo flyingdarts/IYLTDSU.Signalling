@@ -1,4 +1,4 @@
-name: "Build, test, deploy functions"
+name: "Build, test, deploy-function"
 on:
   push:
     branches: [ main ]
@@ -106,8 +106,8 @@ jobs:
           custom_payload: |
             {
               attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${{matrix.functionName}}\nSuccessfully deployed ${process.env.AS_COMMIT}\n${process.env.AS_AUTHOR}`
+                color: 'good',
+                text: `${process.env.AS_WORKFLOW}\n${{matrix.functionName}}\nSuccessfully deployed ${process.env.AS_COMMIT}\n${process.env.AS_AUTHOR}`
               }]
             }
         env:
