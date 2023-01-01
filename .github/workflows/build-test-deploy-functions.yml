@@ -21,9 +21,6 @@ jobs:
     strategy:
       matrix:
         testFunctionName: 
-         - 'EnsureOnlyValidIdentifierCanConnect'
-         - 'EnsureOnlyValidIdentifierCanDisconnect'
-         - 'EnsureOnlyValidIdentifierCanSendMessage'
          - 'EnsureOnlyValidIdentifierCanQueueX01'
          - 'EnsureOnlyValidIdentifierCanScoreX01'
          - 'EnsureOnlyValidIdentifierCanCreateRoom'

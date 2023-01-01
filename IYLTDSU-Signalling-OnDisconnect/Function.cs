@@ -2,39 +2,39 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.RuntimeSupport;
+using Amazon.Lambda.Serialization.SystemTextJson;
 using IYLTDSU.Signalling.Shared;
 
-public class Function
+var DynamoDbClient = new AmazonDynamoDBClient();
+var TableName = Environment.GetEnvironmentVariable("TableName")!;
+
+var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    /// <summary>
-    /// A simple function that takes a string and does a ToUpper
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    private readonly AmazonDynamoDBClient _dynamoDbClient = new();
-    private readonly string _tableName = Environment.GetEnvironmentVariable("TableName")!;
+    var connectionId = request.RequestContext.ConnectionId;
+    context.Logger.LogInformation($"ConnectionId: {connectionId}");
 
-    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
+    var ddbRequest = new DeleteItemRequest
     {
-        var connectionId = request.RequestContext.ConnectionId;
-        context.Logger.LogInformation($"ConnectionId: {connectionId}");
-
-        var ddbRequest = new DeleteItemRequest
+        TableName = TableName,
+        Key = new Dictionary<string, AttributeValue>
         {
-            TableName = _tableName,
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { Fields.ConnectionId, new AttributeValue { S = connectionId } }
-            }
-        };
+            { Fields.ConnectionId, new AttributeValue { S = connectionId } }
+        }
+    };
 
-        await _dynamoDbClient.DeleteItemAsync(ddbRequest);
+    await DynamoDbClient.DeleteItemAsync(ddbRequest);
 
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = 200,
-            Body = "Disconnected."
-        };
-    }
+    return new APIGatewayProxyResponse
+    {
+        StatusCode = 200,
+        Body = "Disconnected."
+    };
 };
+
+// Build the Lambda runtime client passing in the handler to call for each
+// event and the JSON serializer to use for translating Lambda JSON documents
+// to .NET types.
+await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
+        .Build()
+        .RunAsync();
