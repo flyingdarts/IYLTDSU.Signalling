@@ -19,7 +19,7 @@ public class Function
     /// <param name="context"></param>
     /// <returns></returns>
 
-    private readonly AmazonDynamoDBClient _dynamoDbClient = new AmazonDynamoDBClient();
+    private readonly AmazonDynamoDBClient _dynamoDbClient = new();
     private readonly string _tableName = Environment.GetEnvironmentVariable("TableName")!;
     public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {

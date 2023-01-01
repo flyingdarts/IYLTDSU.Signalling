@@ -22,16 +22,16 @@ public class Function
     /// <param name="context"></param>
     /// <returns></returns>
 
-    private readonly AmazonDynamoDBClient _dynamoDbClient = new AmazonDynamoDBClient();
+    private readonly AmazonDynamoDBClient _dynamoDbClient = new();
     private readonly string _tableName = Environment.GetEnvironmentVariable("TableName")!;
     private readonly string _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-    private readonly Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
-    {
-        return new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig
-        {
-            ServiceURL = endpoint
-        });
-    });
+    private readonly Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (endpoint) => 
+        new AmazonApiGatewayManagementApiClient(
+            new AmazonApiGatewayManagementApiConfig
+            {
+                ServiceURL = endpoint
+            });
+
     public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
         try
@@ -48,18 +48,11 @@ public class Function
                 };
             }
 
-            var roomId = "lobby";
-            var playerId = "";
+            var requestData = dataProperty.GetString()!.Split("#");
 
-            if (!dataProperty.GetString()!.StartsWith("lobby"))
-            {
-                roomId = Guid.Parse(dataProperty.GetString()!).ToString().ToLower();
-                playerId = roomId;
-            }
-            else
-            {
-                playerId = Guid.Parse(dataProperty.GetString()!.Split("#")[1]).ToString().ToLower();
-            }
+            var roomId = Guid.Parse(requestData[0]).ToString().ToLower();
+            var playerId = Guid.Parse(requestData[1]).ToString().ToLower();
+            var playerName = requestData[3];
 
             var putItemRequest = new PutItemRequest
             {
@@ -68,7 +61,8 @@ public class Function
                 {
                     { Fields.ConnectionId, new AttributeValue { S = connectionId } },
                     { Fields.RoomId, new AttributeValue { S = roomId } },
-                    { Fields.PlayerId, new AttributeValue { S = playerId } }
+                    { Fields.PlayerId, new AttributeValue { S = playerId } },
+                    { Fields.PlayerName, new AttributeValue { S = playerName } }
                 }
             };
 
@@ -84,6 +78,7 @@ public class Function
             });
 
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+
             // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
             var scanRequest = new ScanRequest
             {
