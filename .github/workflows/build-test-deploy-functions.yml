@@ -74,8 +74,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
+
       - name: Build with dotnet
-        run: dotnet publish --configuration Release --framework net7.0 --self-contained
+        run: dotnet build --configuration Release
       - name: Install Amazon.Lambda.Tools
         run: |
           dotnet tool install -g Amazon.Lambda.Tools
@@ -87,7 +88,7 @@ jobs:
       - name: Deploy function
         working-directory: ${{ matrix.functionName }}
         run: |
-          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun provided.al2 --region eu-west-1
+          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun provided.al2 --region eu-west-1 net7.0 --self-contained
 
         id: function-deploy
       - name: action-slack

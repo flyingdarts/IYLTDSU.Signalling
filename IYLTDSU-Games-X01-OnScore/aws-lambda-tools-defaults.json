@@ -11,5 +11,6 @@
   "function-runtime": "dotnet7",
   "function-memory-size": 256,
   "function-timeout": 30,
-  "function-handler": "IYLTDSU-Games-X01-OnScore::IYLTDSU-Games-X01-OnScore.Function::FunctionHandler"
+  "function-handler": "IYLTDSU-Games-X01-OnScore",
+  "msbuild-parameters": "--self-contained true"
 }
