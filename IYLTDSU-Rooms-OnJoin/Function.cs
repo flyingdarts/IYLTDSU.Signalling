@@ -10,167 +10,154 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
-namespace IYLTDSU.Rooms.OnJoin;
-public class Function
-{
-    /// <summary>
-    /// A simple function that takes a string and does a ToUpper
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-
-    private readonly AmazonDynamoDBClient _dynamoDbClient = new();
-    private readonly string _tableName = Environment.GetEnvironmentVariable("TableName")!;
-    private readonly string _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-    private readonly Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (endpoint) => 
-        new AmazonApiGatewayManagementApiClient(
-            new AmazonApiGatewayManagementApiConfig
-            {
-                ServiceURL = endpoint
-            });
-
-    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
-    {
-        try
+var _dynamoDbClient = new AmazonDynamoDBClient();
+var _tableName = Environment.GetEnvironmentVariable("TableName")!;
+var _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
+Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (endpoint) =>
+    new AmazonApiGatewayManagementApiClient(
+        new AmazonApiGatewayManagementApiConfig
         {
-            var connectionId = request.RequestContext.ConnectionId;
-            JsonDocument message = JsonDocument.Parse(request.Body);
-            JsonElement dataProperty;
-            if (!message.RootElement.TryGetProperty("message", out dataProperty) || dataProperty.GetString() == null)
+            ServiceURL = endpoint
+        });
+var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
+{
+
+    try
+    {
+        var connectionId = request.RequestContext.ConnectionId;
+        JsonDocument message = JsonDocument.Parse(request.Body);
+        JsonElement dataProperty;
+        if (!message.RootElement.TryGetProperty("message", out dataProperty) || dataProperty.GetString() == null)
+        {
+            context.Logger.LogInformation("Failed to find data element in JSON document");
+            return new APIGatewayProxyResponse
             {
-                context.Logger.LogInformation("Failed to find data element in JSON document");
-                return new APIGatewayProxyResponse
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest
-                };
-            }
+                StatusCode = (int)HttpStatusCode.BadRequest
+            };
+        }
 
-            var requestData = dataProperty.GetString()!.Split("#");
+        var requestData = dataProperty.GetString()!.Split("#");
 
-            var roomId = Guid.Parse(requestData[0]).ToString().ToLower();
-            var playerId = Guid.Parse(requestData[1]).ToString().ToLower();
-            var playerName = requestData[3];
+        var roomId = Guid.Parse(requestData[0]).ToString().ToLower();
+        var playerId = Guid.Parse(requestData[1]).ToString().ToLower();
+        var playerName = requestData[3];
 
-            var putItemRequest = new PutItemRequest
-            {
-                TableName = _tableName,
-                Item = new Dictionary<string, AttributeValue>
+        var putItemRequest = new PutItemRequest
+        {
+            TableName = _tableName,
+            Item = new Dictionary<string, AttributeValue>
                 {
                     { Fields.ConnectionId, new AttributeValue { S = connectionId } },
                     { Fields.RoomId, new AttributeValue { S = roomId } },
                     { Fields.PlayerId, new AttributeValue { S = playerId } },
                     { Fields.PlayerName, new AttributeValue { S = playerName } }
                 }
-            };
+        };
 
-            await _dynamoDbClient.PutItemAsync(putItemRequest);
+        await _dynamoDbClient.PutItemAsync(putItemRequest);
 
-            // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-            var apiClient = _apiGatewayManagementApiClientFactory(_webSocketApiUrl);
+        // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
+        var apiClient = _apiGatewayManagementApiClientFactory(_webSocketApiUrl);
 
-            var data = JsonSerializer.Serialize(new
+        var data = JsonSerializer.Serialize(new
+        {
+            action = "room/joined",
+            message = playerId
+        });
+
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+
+        // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
+        var scanRequest = new ScanRequest
+        {
+            TableName = _tableName,
+            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId}"
+        };
+
+        var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
+
+        var connectedClientsInRoom =
+            scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId);
+
+        if (connectedClientsInRoom.Any())
+        {
+            var returnToClientData = JsonSerializer.Serialize(new
             {
-                action = "room/joined",
-                message = playerId
+                action = "lobby/joined",
+                message = connectedClientsInRoom.Select(x => x[Fields.PlayerId].S).ToArray()
             });
 
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+            var returnToClientDataStream = new MemoryStream(Encoding.UTF8.GetBytes(returnToClientData));
 
-            // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
-            var scanRequest = new ScanRequest
+            var returnToClientRequest = new PostToConnectionRequest
             {
-                TableName = _tableName,
-                ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId}"
+                ConnectionId = connectionId,
+                Data = returnToClientDataStream
             };
 
-            var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
+            await apiClient.PostToConnectionAsync(returnToClientRequest);
+        }
 
-            var connectedClientsInRoom =
-                scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId);
-
-            if (connectedClientsInRoom.Any())
+        // Loop through all of the connections and broadcast the message out to the connections.
+        var count = 0;
+        foreach (var item in connectedClientsInRoom)
+        {
+            var postConnectionRequest = new PostToConnectionRequest
             {
-                var returnToClientData = JsonSerializer.Serialize(new
-                {
-                    action = "lobby/joined",
-                    message = connectedClientsInRoom.Select(x => x[Fields.PlayerId].S).ToArray()
-                });
+                ConnectionId = item[Fields.ConnectionId].S,
+                Data = stream
+            };
 
-                var returnToClientDataStream = new MemoryStream(Encoding.UTF8.GetBytes(returnToClientData));
-
-                var returnToClientRequest = new PostToConnectionRequest
-                {
-                    ConnectionId = connectionId,
-                    Data = returnToClientDataStream
-                };
-
-                await apiClient.PostToConnectionAsync(returnToClientRequest);
+            try
+            {
+                context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
+                stream.Position = 0;
+                await apiClient.PostToConnectionAsync(postConnectionRequest);
+                count++;
             }
-
-            // Loop through all of the connections and broadcast the message out to the connections.
-            var count = 0;
-            foreach (var item in connectedClientsInRoom)
+            catch (AmazonServiceException e)
             {
-                var postConnectionRequest = new PostToConnectionRequest
+                // API Gateway returns a status of 410 GONE then the connection is no
+                // longer available. If this happens, delete the identifier
+                // from our DynamoDB table.
+                if (e.StatusCode == HttpStatusCode.Gone)
                 {
-                    ConnectionId = item[Fields.ConnectionId].S,
-                    Data = stream
-                };
-
-                try
-                {
-                    context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
-                    stream.Position = 0;
-                    await apiClient.PostToConnectionAsync(postConnectionRequest);
-                    count++;
-                }
-                catch (AmazonServiceException e)
-                {
-                    // API Gateway returns a status of 410 GONE then the connection is no
-                    // longer available. If this happens, delete the identifier
-                    // from our DynamoDB table.
-                    if (e.StatusCode == HttpStatusCode.Gone)
+                    var ddbDeleteRequest = new DeleteItemRequest
                     {
-                        var ddbDeleteRequest = new DeleteItemRequest
-                        {
-                            TableName = _tableName,
-                            Key = new Dictionary<string, AttributeValue>
+                        TableName = _tableName,
+                        Key = new Dictionary<string, AttributeValue>
                             {
                                 { Fields.ConnectionId, new AttributeValue { S = postConnectionRequest.ConnectionId } }
                             }
-                        };
+                    };
 
-                        context.Logger.LogInformation(
-                            $"Deleting gone connection: {postConnectionRequest.ConnectionId}");
-                        await _dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
-                    }
-                    else
-                    {
-                        context.Logger.LogInformation(
-                            $"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
-                        context.Logger.LogInformation(e.StackTrace);
-                    }
+                    context.Logger.LogInformation(
+                        $"Deleting gone connection: {postConnectionRequest.ConnectionId}");
+                    await _dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
+                }
+                else
+                {
+                    context.Logger.LogInformation(
+                        $"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
+                    context.Logger.LogInformation(e.StackTrace);
                 }
             }
+        }
 
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int)HttpStatusCode.Created,
-                Body = "Room Joined"
-            };
-        }
-        catch (Exception e)
+        return new APIGatewayProxyResponse
         {
-            context.Logger.LogInformation("Error disconnecting: " + e.Message);
-            context.Logger.LogInformation(e.StackTrace);
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int)HttpStatusCode.InternalServerError,
-                Body = $"Failed to send message: {e.Message}"
-            };
-        }
+            StatusCode = (int)HttpStatusCode.Created,
+            Body = "Room Joined"
+        };
     }
-}
+    catch (Exception e)
+    {
+        context.Logger.LogInformation("Error disconnecting: " + e.Message);
+        context.Logger.LogInformation(e.StackTrace);
+        return new APIGatewayProxyResponse
+        {
+            StatusCode = (int)HttpStatusCode.InternalServerError,
+            Body = $"Failed to send message: {e.Message}"
+        };
+    }
+};

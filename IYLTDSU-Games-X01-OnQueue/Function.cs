@@ -1,26 +1,13 @@
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 
-// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
-[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
-namespace IYLTDSU.Games.X01.OnQueue;
-
-public class Function
+var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    /// <summary>
-    /// A simple function that takes a string and does a ToUpper
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="context"></param>
-    /// <returns></returns>
-    public async Task<APIGatewayProxyResponse> FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
-    {
-        var connectionId = request.RequestContext.ConnectionId;
+    var connectionId = request.RequestContext.ConnectionId;
 
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = 200,
-            Body = connectionId
-        };
-    }
-}
+    return new APIGatewayProxyResponse
+    {
+        StatusCode = 200,
+        Body = "Player has left the room"
+    };
+};
