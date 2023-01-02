@@ -64,9 +64,7 @@ jobs:
          - 'IYLTDSU-Rooms-OnLeave'
          - 'IYLTDSU-Games-X01-OnScore'
          - 'IYLTDSU-Games-X01-OnQueue'
-    defaults: 
-      run:
-        working-directory: ${{ matrix.functionName }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -88,7 +86,7 @@ jobs:
       - name: Deploy function
         working-directory: ${{ matrix.functionName }}
         run: |
-          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun provided.al2 --region eu-west-1 net7.0 --self-contained
+          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} --function-runtime provided.al2 --region eu-west-1 --framework dotnet7 --self-contained true
 
         id: function-deploy
       - name: action-slack
