@@ -72,7 +72,7 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: Build with dotnet
-        run: dotnet build --configuration Release --framework "net7.0" --self-contained true /p:GenerateRuntimeConfigurationFiles=true --runtime linux-x64
+        run: dotnet build --configuration Release --framework "net7.0" --self-contained true /p:GenerateRuntimeConfigurationFiles=true
       - name: Install Amazon.Lambda.Tools
         run: |
           dotnet tool install -g Amazon.Lambda.Tools
