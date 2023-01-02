@@ -72,7 +72,7 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --framework "net7.0" --self-contained true /p:GenerateRuntimeConfigurationFiles=true --runtime linux-x64
       - name: Install Amazon.Lambda.Tools
         run: |
           dotnet tool install -g Amazon.Lambda.Tools
@@ -84,7 +84,8 @@ jobs:
       - name: Deploy function
         working-directory: ${{ matrix.functionName }}
         run: |
-          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun dotnet6 --region eu-west-1
+          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} -frun provided.al2 --region eu-west-1
+
         id: function-deploy
       - name: action-slack
         if: failure() && steps.function-deploy.outcome != 'success'
