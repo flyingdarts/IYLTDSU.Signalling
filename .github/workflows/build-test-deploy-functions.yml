@@ -64,6 +64,9 @@ jobs:
          - 'IYLTDSU-Rooms-OnLeave'
          - 'IYLTDSU-Games-X01-OnScore'
          - 'IYLTDSU-Games-X01-OnQueue'
+    defaults: 
+      run:
+        working-directory: ${{ matrix.functionName }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -72,7 +75,7 @@ jobs:
         with:
           dotnet-version: 7.0.x
       - name: Build with dotnet
-        run: dotnet build --configuration Release --framework "net7.0" --self-contained true /p:GenerateRuntimeConfigurationFiles=true
+        run: dotnet publish --configuration Release --framework net7.0 --self-contained
       - name: Install Amazon.Lambda.Tools
         run: |
           dotnet tool install -g Amazon.Lambda.Tools
