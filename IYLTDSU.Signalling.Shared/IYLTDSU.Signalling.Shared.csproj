@@ -5,6 +5,6 @@
 	    <Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.16" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.20" />
 	</ItemGroup>
 </Project>
