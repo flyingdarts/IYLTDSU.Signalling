@@ -1,9 +1,9 @@
-name: "Deploy Rooms OnLeave"
+name: "Deploy OnConnect"
 on:
   push:
     branches: [ main ]
 jobs:
-  OnLeave:
+  OnConnect:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +23,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy function
-        working-directory: "Flyingdarts-Rooms-OnLeave"
+        working-directory: "Flyingdarts-Games-X01-OnQueue"
         run: |
-          dotnet lambda deploy-function --function-name  -frun dotnet6 --region eu-west-1
+          dotnet lambda deploy-function --function-name Flyingdarts-Games-X01-OnQueue -frun dotnet6 --region eu-west-1
