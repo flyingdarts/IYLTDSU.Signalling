@@ -25,6 +25,9 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
+      contents: read
+    permissions:
       actions: read
       contents: read
       security-events: write

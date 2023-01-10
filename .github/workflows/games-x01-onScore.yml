@@ -5,6 +5,9 @@ on:
 jobs:
   OnConnect:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
