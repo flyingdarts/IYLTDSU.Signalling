@@ -9,6 +9,8 @@ using IYLTDSU.Signalling.Shared;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using Amazon.Lambda.RuntimeSupport;
+using Amazon.Lambda.Serialization.SystemTextJson;
 
 AmazonDynamoDBClient _dynamoDbClient = new();
 string _tableName = Environment.GetEnvironmentVariable("TableName")!;
@@ -141,3 +143,10 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
     }
 
 };
+
+// Build the Lambda runtime client passing in the handler to call for each
+// event and the JSON serializer to use for translating Lambda JSON documents
+// to .NET types.
+await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
+    .Build()
+    .RunAsync();
