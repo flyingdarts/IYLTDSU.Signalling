@@ -11,14 +11,14 @@ jobs:
     strategy:
       matrix:
         functionName: 
-         - 'IYLTDSU-Signalling-OnConnect'
-         - 'IYLTDSU-Signalling-OnDisconnect'
-         - 'IYLTDSU-Signalling-OnDefault'
-         - 'IYLTDSU-Rooms-OnCreate'
-         - 'IYLTDSU-Rooms-OnJoin'
-         - 'IYLTDSU-Rooms-OnLeave'
-         - 'IYLTDSU-Games-X01-OnScore'
-         - 'IYLTDSU-Games-X01-OnQueue'
+         - 'Flyingdarts-Signalling-OnConnect'
+         - 'Flyingdarts-Signalling-OnDisconnect'
+         - 'Flyingdarts-Signalling-OnDefault'
+         - 'Flyingdarts-Rooms-OnCreate'
+         - 'Flyingdarts-Rooms-OnJoin'
+         - 'Flyingdarts-Rooms-OnLeave'
+         - 'Flyingdarts-Games-X01-OnScore'
+         - 'Flyingdarts-Games-X01-OnQueue'
 
     steps:
       - name: Checkout
