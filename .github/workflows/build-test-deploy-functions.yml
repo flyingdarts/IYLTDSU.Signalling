@@ -8,6 +8,9 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
     strategy:
       matrix:
         functionName: 
