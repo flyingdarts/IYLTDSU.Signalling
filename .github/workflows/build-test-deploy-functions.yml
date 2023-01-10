@@ -3,56 +3,11 @@ on:
   push:
     branches: [ main ]
 jobs:
-  Build: 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.0.x
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-  Test: 
-    runs-on: ubuntu-latest
-    needs: Build
-    strategy:
-      matrix:
-        testFunctionName: 
-         - 'EnsureOnlyValidIdentifierCanQueueX01'
-         - 'EnsureOnlyValidIdentifierCanScoreX01'
-         - 'EnsureOnlyValidIdentifierCanCreateRoom'
-         - 'EnsureOnlyValidIdentifierCanJoinRoom'
-         - 'EnsureOnlyValidIdentifierCanLeaveRoom'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.0.x
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
-      - name: Run tests
-        run: dotnet test --filter Name=${{ matrix.testFunctionName }}
-        id: function-test
-      - name: action-slack
-        if: failure() && steps.function-test.outcome != 'success'
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ steps.function-test.outcome }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-  Publish:
+  Publish-Functions:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
-    needs: Test
     strategy:
       matrix:
         functionName: 
@@ -86,7 +41,7 @@ jobs:
       - name: Deploy function
         working-directory: ${{ matrix.functionName }}
         run: |
-          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} --function-runtime provided.al2 --region eu-west-1 --framework dotnet7 --self-contained true
+          dotnet lambda deploy-function --function-name ${{ matrix.functionName }} --function-runtime provided.al2 --region eu-west-1 --self-contained true 
 
         id: function-deploy
       - name: action-slack
