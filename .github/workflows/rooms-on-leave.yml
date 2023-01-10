@@ -28,4 +28,4 @@ jobs:
       - name: Deploy function
         working-directory: "Flyingdarts-Rooms-OnLeave"
         run: |
-          dotnet lambda deploy-function --function-name  -frun dotnet6 --region eu-west-1
+          dotnet lambda deploy-function --function-name Flyingdarts-Rooms-OnLeave -frun dotnet6 --region eu-west-1

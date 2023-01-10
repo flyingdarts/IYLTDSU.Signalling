@@ -5,9 +5,6 @@ on:
 jobs:
   OnJoin:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -26,6 +23,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy function
-        working-directory: Flyingdarts-Rooms-OnJoin"
+        working-directory: "Flyingdarts-Rooms-OnJoin"
         run: |
           dotnet lambda deploy-function --function-name Flyingdarts-Rooms-OnJoin -frun dotnet6 --region eu-west-1
