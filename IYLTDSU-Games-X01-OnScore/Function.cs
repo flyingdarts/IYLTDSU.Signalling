@@ -15,13 +15,13 @@ using Amazon.Lambda.Serialization.SystemTextJson;
 AmazonDynamoDBClient _dynamoDbClient = new();
 string _tableName = Environment.GetEnvironmentVariable("TableName")!;
 string _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
+Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (endpoint) =>
 {
     return new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig
     {
         ServiceURL = endpoint
     });
-});
+};
 
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
