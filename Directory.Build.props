@@ -2,6 +2,6 @@
   <PropertyGroup>
     <LangVersion>10</LangVersion>
     <RuntimeIdentifiers>linux-x64;</RuntimeIdentifiers>
-    <TargetFrameworks>net7.0;</TargetFrameworks>
+    <TargetFrameworks>net6.0;</TargetFrameworks>
   </PropertyGroup>
 </Project>
